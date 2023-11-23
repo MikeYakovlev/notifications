@@ -1,1 +1,3 @@
 # notifications
+
+- add test workflow
