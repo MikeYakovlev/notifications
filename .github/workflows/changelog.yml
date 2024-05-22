@@ -18,13 +18,13 @@ jobs:
         id: extract-version
         run: |
           if [ -f CHANGELOG.md ]; then
-            VERSION=$(awk '/## \[Unreleased\]/{getline;getline;print}' CHANGELOG.md | grep -Po '\d+\.\d+\.\d+')
+            VERSION=$(awk '/## \[Unreleased\]/{getline;getline;getline;print}' CHANGELOG.md | grep -Po '^\d+\.\d+\.\d+$')
             if [ -z "$VERSION" ]; then
               echo "Version number not found after ## [Unreleased]"
               exit 1
             else
               echo "Found version: $VERSION"
-              echo "version=$VERSION" >> $GITHUB_ENV
+              echo "VERSION=$VERSION" >> $GITHUB_ENV
             fi
           else
             echo "CHANGELOG.md file does not exist"
@@ -32,6 +32,6 @@ jobs:
           fi
 
       - name: Set output version
-        run: echo "version=${{ env.version }}"
+        run: echo "version=${{ env.VERSION }}"
         id: set-version
         continue-on-error: false
