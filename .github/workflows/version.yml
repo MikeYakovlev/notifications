@@ -4,4 +4,12 @@ jobs:
   APP-Version_Check:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "test versions"
+      - name: Check out .env code
+        uses: actions/checkout@v4
+      - run: |
+          if git diff --name-only HEAD^ HEAD | grep '.env'; then
+            echo ".env file has been changed"
+            exit 1
+          else
+            echo ".env file has not been changed"
+            fi
