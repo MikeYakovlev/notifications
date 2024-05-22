@@ -7,24 +7,20 @@ on:
 jobs:
   check-changelog-version:
     runs-on: ubuntu-latest
-
-    outputs:
-      version: ${{ steps.extract-version.outputs.version }}
-
     steps:
       - uses: actions/checkout@v4
 
       - name: Extract version number from CHANGELOG.md
-        id: extract-version
+        id: changelog-version
         run: |
           if [ -f CHANGELOG.md ]; then
-            VERSION=$(awk '/## \[Unreleased\]/{getline;getline;getline;print}' CHANGELOG.md | grep -Po '^\d+\.\d+\.\d+$')
+            VERSION=$(awk '/## \[Unreleased\]/{getline;getline;print}' CHANGELOG.md | grep -Po '\d+\.\d+\.\d+')
             if [ -z "$VERSION" ]; then
               echo "Version number not found after ## [Unreleased]"
               exit 1
             else
               echo "Found version: $VERSION"
-              echo "VERSION=$VERSION" >> $GITHUB_ENV
+              echo "::set-output name=version::$VERSION"
             fi
           else
             echo "CHANGELOG.md file does not exist"
