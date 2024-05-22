@@ -14,13 +14,13 @@ jobs:
         id: changelog-version
         run: |
           if [ -f CHANGELOG.md ]; then
-            VERSION=$(awk '/## \[Unreleased\]/ {getline; getline; getline; if ($0 ~ /^\[.*\]$/) {getline}; print}' CHANGELOG.md | grep -Po '^\d+\.\d+\.\d+')
+            VERSION=$(awk '/## \[Unreleased\]/{getline;getline;print}' CHANGELOG.md | grep -Po '\d+\.\d+\.\d+')
             if [ -z "$VERSION" ]; then
               echo "Version number not found after ## [Unreleased]"
               exit 1
             else
               echo "Found version: $VERSION"
-              echo "version=$VERSION" >> $GITHUB_OUTPUT
+              echo "::set-output name=version::$VERSION"
             fi
           else
             echo "CHANGELOG.md file does not exist"
