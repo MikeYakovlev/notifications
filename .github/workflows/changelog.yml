@@ -14,7 +14,7 @@ jobs:
         id: changelog-version
         run: |
           if [ -f CHANGELOG.md ]; then
-            VERSION=$(grep -Po '(?<=## \[Unreleased\]\n\n## \[)\d+\.\d+\.\d+' CHANGELOG.md | head -1)
+            VERSION=$(awk '/## \[Unreleased\]/{getline;getline;print}' CHANGELOG.md | grep -Po '\d+\.\d+\.\d+')
             if [ -z "$VERSION" ]; then
               echo "Version number not found after ## [Unreleased]"
               exit 1
