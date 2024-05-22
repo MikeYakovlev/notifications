@@ -1,0 +1,20 @@
+name: App version check
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  env-file-check:
+    name: Check if .env file has been changed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check .env file
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep '.env'; then
+            echo ".env file has been changed"
+            exit 1
+          else
+            echo ".env file has not been changed"
+          fi
