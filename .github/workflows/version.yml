@@ -3,3 +3,5 @@ on: [push]
 jobs:
   APP-Version_Check:
     runs-on: ubuntu-latest
+    steps:
+      - run: echo "test versions"
