@@ -1,0 +1,26 @@
+name: Check VUE_APP_VERSION
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  check-env-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check VUE_APP_VERSION in .env
+        run: |
+          if [ -f .env ]; then
+            VUE_APP_VERSION=$(grep '^VUE_APP_VERSION=' .env | cut -d '=' -f2)
+            if [ -z "$VUE_APP_VERSION" ]; then
+              echo "VUE_APP_VERSION is not set in .env file"
+              exit 1
+            else
+              echo "VUE_APP_VERSION is set to $VUE_APP_VERSION in .env file"
+            fi
+          else
+            echo ".env file does not exist"
+            exit 1
+          fi
