@@ -30,8 +30,3 @@ jobs:
             echo "CHANGELOG.md file does not exist"
             exit 1
           fi
-
-      - name: Set output version
-        run: echo "version=${{ env.VERSION }}"
-        id: set-version
-        continue-on-error: false
