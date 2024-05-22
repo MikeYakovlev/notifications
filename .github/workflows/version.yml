@@ -2,7 +2,7 @@ name: App version check
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ master, main ]
 
 jobs:
   env-file-check:
