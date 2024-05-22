@@ -20,7 +20,7 @@ jobs:
               exit 1
             else
               echo "Found version: $VERSION"
-              echo "::set-output name=version::$VERSION"
+              echo "version=$VERSION" >> $GITHUB_OUTPUT
             fi
           else
             echo "CHANGELOG.md file does not exist"
