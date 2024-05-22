@@ -1,0 +1,5 @@
+name: Version check
+on: [push]
+jobs:
+  APP-Version_Check:
+    runs-on: ubuntu-latest
