@@ -4,12 +4,12 @@ jobs:
   APP-Version_Check:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out .env code
-        uses: actions/checkout@v4
-      - run: |
-          if git diff --name-only HEAD^ HEAD | grep -q '.env'; then
-            echo ".env file has been changed"
-          else
-            echo ".env file has not been changed"
-            exit 1
-          fi
+      - uses: actions/checkout@v4
+
+      - name: Verify Changed files
+        uses: tj-actions/verify-changed-files@v20
+        id: verify-changed-files
+        with:
+          files: |
+             *.txt
+      
