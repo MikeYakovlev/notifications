@@ -49,7 +49,7 @@ jobs:
           ENV_VERSION=${{ steps.check-env.outputs.env_version }}
           CHANGELOG_VERSION=${{ steps.check-changelog.outputs.changelog_version }}
           if [ "$ENV_VERSION" != "$CHANGELOG_VERSION" ]; then
-            echo "Version mismatch: VUE_APP_VERSION ($ENV_VERSION) != CHANGELOG version ($CHANGELOG_VERSION)"
+            echo "Version mismatch: VUE_APP_VERSION: ($ENV_VERSION); CHANGELOG version: ($CHANGELOG_VERSION)"
             exit 1
           else
             echo "Versions match: $ENV_VERSION"
