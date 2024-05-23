@@ -19,7 +19,7 @@ jobs:
               echo "VUE_APP_VERSION is not set in .env file"
               exit 1
             else
-              echo "VUE_APP_VERSION is set to $VUE_APP_VERSION in .env file"
+              echo "VUE_APP_VERSION: $VUE_APP_VERSION"
               echo "env_version=$VUE_APP_VERSION" >> "$GITHUB_OUTPUT"
             fi
           else
@@ -27,16 +27,16 @@ jobs:
             exit 1
           fi
 
-      - name: Extract version number from CHANGELOG.md
+      - name: Extract version from CHANGELOG.md
         id: check-changelog
         run: |
           if [ -f CHANGELOG.md ]; then
             VERSION=$(grep -Po '^## \[\K\d+\.\d+\.\d+(?=\])' CHANGELOG.md | head -n 1)
             if [ -z "$VERSION" ]; then
-              echo "Version number not found after ## [Unreleased]"
+              echo "Version not found in CHANGELOG.md"
               exit 1
             else
-              echo "Found version: $VERSION"
+              echo "changelog version: $VERSION"
               echo "changelog_version=$VERSION" >> "$GITHUB_OUTPUT"
             fi
           else
