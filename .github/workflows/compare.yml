@@ -1,16 +1,17 @@
-name: Check VUE_APP_VERSION
+name: Check Versions
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  check-env-version:
+  check-versions:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Check VUE_APP_VERSION in .env
+        id: check-env
         run: |
           if [ -f .env ]; then
             VUE_APP_VERSION=$(grep '^VUE_APP_VERSION=' .env | cut -d '=' -f2)
@@ -19,8 +20,37 @@ jobs:
               exit 1
             else
               echo "VUE_APP_VERSION is set to $VUE_APP_VERSION in .env file"
+              echo "::set-output name=env_version::$VUE_APP_VERSION"
             fi
           else
             echo ".env file does not exist"
             exit 1
+          fi
+
+      - name: Extract version number from CHANGELOG.md
+        id: check-changelog
+        run: |
+          if [ -f CHANGELOG.md ]; then
+            VERSION=$(awk '/## \[Unreleased\]/{getline;getline;print}' CHANGELOG.md | grep -Po '\d+\.\d+\.\d+')
+            if [ -z "$VERSION" ]; then
+              echo "Version number not found after ## [Unreleased]"
+              exit 1
+            else
+              echo "Found version: $VERSION"
+              echo "::set-output name=changelog_version::$VERSION"
+            fi
+          else
+            echo "CHANGELOG.md file does not exist"
+            exit 1
+          fi
+
+      - name: Compare versions
+        run: |
+          ENV_VERSION=${{ steps.check-env.outputs.env_version }}
+          CHANGELOG_VERSION=${{ steps.check-changelog.outputs.changelog_version }}
+          if [ "$ENV_VERSION" != "$CHANGELOG_VERSION" ]; then
+            echo "Version mismatch: VUE_APP_VERSION ($ENV_VERSION) != CHANGELOG version ($CHANGELOG_VERSION)"
+            exit 1
+          else
+            echo "Versions match: $ENV_VERSION"
           fi
