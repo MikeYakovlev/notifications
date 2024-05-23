@@ -30,19 +30,19 @@ jobs:
       - name: Extract version number from CHANGELOG.md
         id: check-changelog
         run: |
-          if [ -f CHANGELOG.md ]; then
-            VERSION=$(awk '/## \[Unreleased\]/{getline;getline;print}' CHANGELOG.md | grep -Po '[\d+\.\d+\.\d+]')
-            if [ -z "$VERSION" ]; then
-              echo "Version number not found after ## [Unreleased]"
-              exit 1
+            if [ -f CHANGELOG.md ]; then
+              VERSION=$(awk '/## \[Unreleased\]/ {getline; getline; getline; print}' CHANGELOG.md | grep -Po '^\[?\K\d+\.\d+\.\d+')
+            	if [ -z "$VERSION" ]; then
+                echo "Version number not found after ## [Unreleased]"
+                exit 1
+              else
+                echo "Found version: $VERSION"
+                echo "changelog_version=$VERSION" >> "$GITHUB_OUTPUT"
+              fi
             else
-              echo "Found version: $VERSION"
-              echo "changelog_version=$VERSION" >> "$GITHUB_OUTPUT"
+              echo "CHANGELOG.md file does not exist"
+              exit 1
             fi
-          else
-            echo "CHANGELOG.md file does not exist"
-            exit 1
-          fi
 
       - name: Compare versions
         run: |
