@@ -1,6 +1,6 @@
 ## [Unreleased]
 
-## [1.8.5] 22.05.2024
+## [1.8.5] 24.05.2024
 
 ### Added
 - Check for date inside Installation Wizard, Internet Connection and Wizard Info Popup
